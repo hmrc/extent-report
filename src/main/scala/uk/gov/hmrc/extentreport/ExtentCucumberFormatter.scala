@@ -27,7 +27,6 @@ import org.openqa.selenium.{OutputType, TakesScreenshot, WebDriver}
 
 class ExtentCucumberFormatter(file: File) extends Reporter with Formatter {
 
-  implicit lazy val driver = Driver.webDriver
   private var htmlReporter: ExtentHtmlReporter = new ExtentHtmlReporter(new File(ExtentProperties.getReportPath))
   private var extentReports: ExtentReports = new ExtentReports
   val featureTestThreadLocal = new InheritableThreadLocal[ExtentTest]
