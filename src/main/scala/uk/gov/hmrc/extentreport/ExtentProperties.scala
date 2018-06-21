@@ -18,19 +18,29 @@ package uk.gov.hmrc.extentreport
 
 import java.io.File
 
+import org.openqa.selenium.WebDriver
+
 object ExtentProperties extends Enumeration {
   type ExtentProperties = Value
   val INSTANCE = Value
   private var reportPath: String = _
   var extentXServerUrl: String = _
   var projectName: String = _
-
+  var webDriver: WebDriver = _
 
 
   def apply(): ExtentProperties = {
     reportPath = "output" + File.separator + "Run_" + System.currentTimeMillis + File.separator + "report.html"
     projectName = "default"
+    webDriver = null
     INSTANCE
+  }
+
+
+  def getWebDriver: WebDriver = webDriver
+
+  def setWebDriver(driver: WebDriver): Unit = {
+    this.webDriver = driver
   }
 
 

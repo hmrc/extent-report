@@ -18,13 +18,12 @@ package uk.gov.hmrc.extentreport
 
 import java.io.{BufferedOutputStream, File, FileOutputStream}
 import java.util
-
 import com.aventstack.extentreports.markuputils.MarkupHelper
 import com.aventstack.extentreports.reporter.ExtentHtmlReporter
 import com.aventstack.extentreports.{ExtentReports, ExtentTest, GherkinKeyword}
 import gherkin.formatter.model._
 import gherkin.formatter.{Formatter, Reporter}
-import org.openqa.selenium.{OutputType, TakesScreenshot}
+import org.openqa.selenium.{OutputType, TakesScreenshot, WebDriver}
 
 class ExtentCucumberFormatter(file: File) extends Reporter with Formatter {
 
@@ -38,6 +37,7 @@ class ExtentCucumberFormatter(file: File) extends Reporter with Formatter {
   val stepTestThreadLocal = new InheritableThreadLocal[ExtentTest]
   private var scenarioOutlineFlag = false
   var scenarioName: String = null
+  var webDriver : WebDriver = null
 
   private def setExtentReport(): Unit = {
     extentReports.attachReporter(htmlReporter)
@@ -225,7 +225,8 @@ class ExtentCucumberFormatter(file: File) extends Reporter with Formatter {
   override def eof(): Unit = {}
 
   def screenShot(result: Result): Option[File] = {
-    Driver.webDriver match {
+    webDriver = ExtentProperties.getWebDriver
+    webDriver match {
       case screenshot1: TakesScreenshot =>
         val screenshot: Array[Byte] = screenshot1.getScreenshotAs(OutputType.BYTES)
         val screenshotName = scenarioName
