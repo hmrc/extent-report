@@ -1,5 +1,6 @@
 
 # extent-report
+------------------
 
  [ ![Download](https://api.bintray.com/packages/hmrc/releases/extent-report/images/download.svg) ](https://bintray.com/hmrc/releases/extent-report/_latestVersion)
 
