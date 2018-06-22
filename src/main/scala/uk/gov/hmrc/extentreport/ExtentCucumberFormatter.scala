@@ -32,7 +32,7 @@ class ExtentCucumberFormatter(file: File) extends Reporter with Formatter {
   val featureTestThreadLocal = new InheritableThreadLocal[ExtentTest]
   private val scenarioOutlineThreadLocal = new InheritableThreadLocal[ExtentTest]
   private val stepListThreadLocal = new InheritableThreadLocal[util.LinkedList[Step]]
-  private[common] val scenarioThreadLocal = new InheritableThreadLocal[ExtentTest]
+  val scenarioThreadLocal = new InheritableThreadLocal[ExtentTest]
   val stepTestThreadLocal = new InheritableThreadLocal[ExtentTest]
   private var scenarioOutlineFlag = false
   var scenarioName:String = null
