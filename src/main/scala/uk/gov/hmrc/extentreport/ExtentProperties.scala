@@ -23,47 +23,22 @@ import org.openqa.selenium.WebDriver
 object ExtentProperties extends Enumeration {
   type ExtentProperties = Value
   val INSTANCE = Value
-  private var reportPath: String = _
+  var reportPath: String = _
   var extentXServerUrl: String = _
   var projectName: String = _
   var webDriver: WebDriver = _
 
 
-  def apply(): ExtentProperties = {
+
+
+
+  def create(wd: WebDriver, path: String): ExtentProperties = {
     reportPath = "output" + File.separator + "Run_" + System.currentTimeMillis + File.separator + "report.html"
     projectName = "default"
-    webDriver = null
+    webDriver = wd
+    reportPath = path
     INSTANCE
   }
 
 
-  def getWebDriver: WebDriver = webDriver
-
-  def setWebDriver(driver: WebDriver): Unit = {
-    this.webDriver = driver
-  }
-
-
-  def getReportPath: String = reportPath
-
-
-  def setReportPath(reportPath: String): Unit = {
-    this.reportPath = reportPath
-  }
-
-
-  def getExtentXServerUrl: String = extentXServerUrl
-
-
-  def setExtentXServerUrl(extentXServerUrl: String): Unit = {
-    this.extentXServerUrl = extentXServerUrl
-  }
-
-
-  def getProjectName: String = projectName
-
-
-  def setProjectName(projectName: String): Unit = {
-    this.projectName = projectName
-  }
 }

@@ -27,31 +27,35 @@ import org.openqa.selenium.{OutputType, TakesScreenshot, WebDriver}
 
 class ExtentCucumberFormatter(file: File) extends Reporter with Formatter {
 
-  private var htmlReporter: ExtentHtmlReporter = new ExtentHtmlReporter(new File(ExtentProperties.getReportPath))
+  private var htmlReporter: ExtentHtmlReporter = new ExtentHtmlReporter(new File(ExtentProperties.reportPath))
   private var extentReports: ExtentReports = new ExtentReports
   val featureTestThreadLocal = new InheritableThreadLocal[ExtentTest]
   private val scenarioOutlineThreadLocal = new InheritableThreadLocal[ExtentTest]
   private val stepListThreadLocal = new InheritableThreadLocal[util.LinkedList[Step]]
-  val scenarioThreadLocal = new InheritableThreadLocal[ExtentTest]
+  private[common] val scenarioThreadLocal = new InheritableThreadLocal[ExtentTest]
   val stepTestThreadLocal = new InheritableThreadLocal[ExtentTest]
   private var scenarioOutlineFlag = false
-  var scenarioName: String = null
+  var scenarioName:String = null
   var webDriver : WebDriver = null
+
 
   private def setExtentReport(): Unit = {
     extentReports.attachReporter(htmlReporter)
   }
 
   def this() = {
-    this(file = new File(ExtentProperties.getReportPath))
+    this(file = new File(ExtentProperties.reportPath))
     setExtentReport()
     stepListThreadLocal.set(new util.LinkedList[Step])
     scenarioOutlineFlag = false
+
+
   }
 
   def getExtentHtmlReport: ExtentHtmlReporter = {
     htmlReporter
   }
+
 
 
   def getExtentReport: ExtentReports = {
@@ -64,11 +68,14 @@ class ExtentCucumberFormatter(file: File) extends Reporter with Formatter {
     if (scenarioOutlineFlag) return
 
     if (Result.PASSED == result.getStatus) stepTestThreadLocal.get.pass(Result.PASSED)
-    else if (Result.FAILED == result.getStatus) {
+    else if (Result.FAILED == result.getStatus)
+    {
       stepTestThreadLocal.get.fail(result.getError)
-      val destinationPath = screenShot(result)
+      val destinationPath= screenShot(result)
       stepTestThreadLocal.get.addScreenCaptureFromPath(destinationPath.get.getName)
     }
+
+
     else if (Result.SKIPPED == result) stepTestThreadLocal.get.skip(Result.SKIPPED.getStatus)
     else if (Result.UNDEFINED == result) stepTestThreadLocal.get.skip(Result.UNDEFINED.getStatus)
   }
@@ -96,14 +103,12 @@ class ExtentCucumberFormatter(file: File) extends Reporter with Formatter {
           data(i)(j) = cells.get(j)
 
           {
-            j += 1;
-            j - 1
+            j += 1; j - 1
           }
         }
 
         {
-          i += 1;
-          i - 1
+          i += 1; i - 1
         }
       }
     }
@@ -158,7 +163,7 @@ class ExtentCucumberFormatter(file: File) extends Reporter with Formatter {
   override def examples(examples: Examples): Unit = {
     val test = scenarioOutlineThreadLocal.get
 
-    var data: Array[Array[String]] = null
+    var data:Array[Array[String]] = null
     val rows = examples.getRows
     val rowSize = rows.size
     var i = 0
@@ -176,14 +181,12 @@ class ExtentCucumberFormatter(file: File) extends Reporter with Formatter {
         data(i)(j) = cells.get(j)
 
         {
-          j += 1;
-          j - 1
+          j += 1; j - 1
         }
       }
 
       {
-        i += 1;
-        i - 1
+        i += 1; i - 1
       }
     }
     test.info(MarkupHelper.createTable(data))
@@ -200,7 +203,9 @@ class ExtentCucumberFormatter(file: File) extends Reporter with Formatter {
     for (tag <- scenario.getTags) {
       scenarioNode.assignCategory(tag.getName)
     }
+
     scenarioThreadLocal.set(scenarioNode)
+
     scenarioName = scenario.getName
   }
 
@@ -224,7 +229,7 @@ class ExtentCucumberFormatter(file: File) extends Reporter with Formatter {
   override def eof(): Unit = {}
 
   def screenShot(result: Result): Option[File] = {
-    webDriver = ExtentProperties.getWebDriver
+    webDriver = ExtentProperties.webDriver
     webDriver match {
       case screenshot1: TakesScreenshot =>
         val screenshot: Array[Byte] = screenshot1.getScreenshotAs(OutputType.BYTES)
@@ -232,13 +237,13 @@ class ExtentCucumberFormatter(file: File) extends Reporter with Formatter {
         val bos = new BufferedOutputStream(new FileOutputStream("target/" + screenshotName + ".png"))
         bos.write(screenshot)
         bos.close()
-        val destinationPath: File = new File("target/" + screenshotName + ".png")
+        val destinationPath : File = new File("target/" + screenshotName + ".png")
         Some(destinationPath)
 
     }
   }
 }
-
 object ExtentCucumberFormatter extends ExtentCucumberFormatter {
+
 
 }
