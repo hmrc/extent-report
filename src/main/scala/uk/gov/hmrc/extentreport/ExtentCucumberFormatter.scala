@@ -234,10 +234,10 @@ class ExtentCucumberFormatter(file: File) extends Reporter with Formatter {
       case screenshot1: TakesScreenshot =>
         val screenshot: Array[Byte] = screenshot1.getScreenshotAs(OutputType.BYTES)
         val screenshotName = scenarioName
-        val bos = new BufferedOutputStream(new FileOutputStream("target/" + screenshotName + ".png"))
+        val bos = new BufferedOutputStream(new FileOutputStream("target/test-reports/html-report/" + screenshotName + ".png"))
         bos.write(screenshot)
         bos.close()
-        val destinationPath : File = new File("target/" + screenshotName + ".png")
+        val destinationPath : File = new File("target/test-reports/html-report/" + screenshotName + ".png")
         Some(destinationPath)
 
     }
