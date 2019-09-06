@@ -18,27 +18,24 @@ package uk.gov.hmrc.extentreport
 
 import java.io.File
 
+import org.junit.{AfterClass, BeforeClass}
 import org.openqa.selenium.WebDriver
 
-object ExtentProperties extends Enumeration {
-  type ExtentProperties = Value
-  val INSTANCE = Value
-  var reportPath: String = _
-  var extentXServerUrl: String = _
-  var projectName: String = _
-  var webDriver: WebDriver = _
+trait ExtentHooks {
 
+  val webDriver: WebDriver
 
-
-
-
-  def create(wd: WebDriver, path: String): ExtentProperties = {
-    reportPath = "output" + File.separator + "Run_" + System.currentTimeMillis + File.separator + "report.html"
-    projectName = "default"
-    webDriver = wd
-    reportPath = path
-    INSTANCE
+  @BeforeClass
+  def setup(): Unit = {
+    val dirName = "target/test-reports/html-report"
+    val extentProperties = ExtentProperties.INSTANCE
+    val dir = new File(dirName)
+    val successful = dir.mkdir()
+    ExtentProperties.create(webDriver, dirName + "/index.html")
   }
 
-
+  @AfterClass
+  def writeExtentReport(): Unit = {
+    Reporter.loadXMLConfig("src/test/resources/extent-config.xml")
+  }
 }
