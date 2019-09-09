@@ -1,7 +1,7 @@
 val appName = "extent-report"
 
 lazy val extentreport = Project(appName, file("."))
-  .enablePlugins(SbtAutoBuildPlugin, SbtGitVersioning)
+  .enablePlugins(SbtAutoBuildPlugin, SbtGitVersioning, SbtArtifactory)
   .settings(
     scalacOptions ++= Seq(
       "-feature",
@@ -19,5 +19,7 @@ lazy val extentreport = Project(appName, file("."))
       Resolver.bintrayRepo("hmrc", "releases"),
       "typesafe-releases" at "http://repo.typesafe.com/typesafe/releases/"
     ),
-    crossScalaVersions := Seq("2.11.11", "2.12.3")
+    crossScalaVersions := Seq("2.11.11", "2.12.3"),
+    majorVersion := 0,
+    makePublicallyAvailableOnBintray := true
   )
